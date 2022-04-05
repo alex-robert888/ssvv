@@ -3,6 +3,7 @@ package ssvv.lab1;
 import static org.junit.Assert.assertTrue;
 
 import domain.Student;
+import domain.Tema;
 import junit.framework.TestCase;
 import org.junit.After;
 import org.junit.Assert;
@@ -51,6 +52,10 @@ public class AppTest {
         List<String> studentIds = new ArrayList<>();
         service.getAllStudenti().forEach(s -> studentIds.add(s.getID()));
         studentIds.forEach(id -> service.deleteStudent(id));
+
+        List<String> assignmentIds = new ArrayList<>();
+        service.getAllTeme().forEach(a -> assignmentIds.add(a.getID()));
+        assignmentIds.forEach(id -> service.deleteTema(id));
     }
 
     /**
@@ -98,5 +103,83 @@ public class AppTest {
     @Test(expected = ValidationException.class)
     public void addStudent_invalidEmail_shouldThrowError(){
         service.addStudent(new Student("asd", "Bob", 123, ""));
+    }
+
+
+// ======================== Add assignment ==============================
+
+
+    @Test
+    public void addAssignment_valid_shouldSucceed(){
+        service.addTema(new Tema("bezos", "Amazon Web Services HW 2", 3, 3));
+
+        Tema assignment = service.findTema("bezos");
+        Assert.assertNotNull(assignment);
+    }
+
+    @Test(expected = ValidationException.class)
+    public void addAssignment_idNull_shouldThrowError(){
+        service.addTema(new Tema(null, "Amazon Web Services HW 2", 3, 3));
+    }
+
+    @Test(expected = ValidationException.class)
+    public void addAssignment_idEmpty_shouldThrowError(){
+        service.addTema(new Tema("", "Amazon Web Services HW 2", 3, 3));
+    }
+
+    @Test(expected = ValidationException.class)
+    public void addAssignment_descriptionEmpty_shouldThrowError(){
+        service.addTema(new Tema("bezos", "", 3, 3));
+    }
+
+    @Test
+    public void addAssignment_deadlineLowerValidEdgeCase_shouldSucceed(){
+        service.addTema(new Tema("bezos", "Amazon Web Services HW 2", 1, 3));
+    }
+
+    @Test
+    public void addAssignment_deadlineHigherValidEdgeCase_shouldSucceed(){
+        service.addTema(new Tema("bezos", "Amazon Web Services HW 2", 14, 14));
+    }
+
+    @Test(expected = ValidationException.class)
+    public void addAssignment_deadlineLowerInvalidEdgeCase_shouldThrowError(){
+        service.addTema(new Tema("bezos", "Amazon Web Services HW 2", 0, 3));
+    }
+
+    @Test(expected = ValidationException.class)
+    public void addAssignment_deadlineHigherInvalidEdgeCase_shouldThrowError(){
+        service.addTema(new Tema("bezos", "Amazon Web Services HW 2", 15, 3));
+    }
+
+    @Test
+    public void addAssignment_primireLowerValidEdgeCase_shouldSucceed(){
+        service.addTema(new Tema("bezos", "Amazon Web Services HW 2", 1, 1));
+    }
+
+    @Test
+    public void addAssignment_primireHigherValidEdgeCase_shouldSucceed(){
+        service.addTema(new Tema("bezos", "Amazon Web Services HW 2", 14, 14));
+    }
+
+    @Test(expected = ValidationException.class)
+    public void addAssignment_primireLowerInvalidEdgeCase_shouldThrowError(){
+        service.addTema(new Tema("bezos", "Amazon Web Services HW 2", 1, 0));
+    }
+
+    @Test(expected = ValidationException.class)
+    public void addAssignment_primireHigherInvalidEdgeCase_shouldThrowError(){
+        service.addTema(new Tema("bezos", "Amazon Web Services HW 2", 1, 15));
+    }
+
+    @Test
+    public void addAssignment_duplicateId_shouldNotSave(){
+        service.addTema(new Tema("bezos", "Amazon Web Services HW 2", 3, 3));
+        service.addTema(new Tema("bezos", "Amazon Web Services HW 3", 3, 3));
+
+        List<Tema> assignments = new ArrayList<>();
+        service.getAllTeme().forEach(assignments::add);
+
+        Assert.assertEquals(1, assignments.size());
     }
 }
