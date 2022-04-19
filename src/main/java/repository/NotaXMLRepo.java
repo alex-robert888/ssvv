@@ -21,6 +21,10 @@ public class NotaXMLRepo extends AbstractXMLRepository<String, Nota> {
     public Element createElementfromEntity(Document document, Nota entity) {
         Element e = document.createElement("nota");
 
+        Element idNota = document.createElement("idNota");
+        idNota.setTextContent(entity.getID());
+        e.appendChild(idNota);
+
         Element idStudent = document.createElement("idStudent");
         idStudent.setTextContent(entity.getIdStudent());
         e.appendChild(idStudent);

@@ -25,7 +25,6 @@ import java.util.List;
  * Unit test for simple App.
  */
 public class AppTest {
-
     StudentValidator studentValidator = new StudentValidator();
     TemaValidator temaValidator = new TemaValidator();
     String filenameStudent = "fisiere/StudentiTest.xml";
