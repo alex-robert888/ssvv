@@ -78,8 +78,8 @@ public class IntegrationTest {
         service.addTema(new Tema("bezos", "Amazon Web Services HW 2", 7, 3));
         service.addNota(new Nota("b1", "s1", "bezos", 9, LocalDate.of(2022, 4, 18)), "Birds fly");
 
-        Nota assignment = service.findNota("b1");
-        Assert.assertNotNull(assignment);
+        Nota nota = service.findNota("b1");
+        Assert.assertNotNull(nota);
     }
 
     @Test
@@ -88,7 +88,40 @@ public class IntegrationTest {
         service.addTema(new Tema("bezos", "Amazon Web Services HW 2", 7, 3));
         service.addNota(new Nota("b1", "s1", "bezos", 9, LocalDate.of(2022, 4, 18)), "Birds fly");
 
-        Nota assignment = service.findNota("b1");
+        Nota nota = service.findNota("b1");
+        Assert.assertNotNull(nota);
+    }
+
+    @Test
+    public void topDownLvl1_valid_shouldSucceed(){
+        service.addStudent(new Student("s1", "Bob Bobbington", 911, "bob@bobmail.com"));
+
+        Student student = service.findStudent("s1");
+        Assert.assertNotNull(student);
+    }
+
+    @Test
+    public void topDownLvl2_valid_shouldSucceed(){
+        service.addStudent(new Student("s1", "Bob Bobbington", 911, "bob@bobmail.com"));
+        service.addTema(new Tema("bezos", "Amazon Web Services HW 2", 7, 3));
+
+        Student student = service.findStudent("s1");
+        Assert.assertNotNull(student);
+        Tema assignment = service.findTema("bezos");
         Assert.assertNotNull(assignment);
+    }
+
+    @Test
+    public void topDownLvl3_valid_shouldSucceed(){
+        service.addStudent(new Student("s1", "Bob Bobbington", 911, "bob@bobmail.com"));
+        service.addTema(new Tema("bezos", "Amazon Web Services HW 2", 7, 3));
+        service.addNota(new Nota("b1", "s1", "bezos", 9, LocalDate.of(2022, 4, 18)), "Birds fly");
+
+        Student student = service.findStudent("s1");
+        Assert.assertNotNull(student);
+        Tema assignment = service.findTema("bezos");
+        Assert.assertNotNull(assignment);
+        Nota nota = service.findNota("b1");
+        Assert.assertNotNull(nota);
     }
 }
